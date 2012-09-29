@@ -57,8 +57,8 @@ for url in statuses[0].find("entities").find("urls"):
 
 	status = status[:start] + url.find('expanded_url').text + status[end:]
 
-print status
-
 # Could add others here. Maybe it should be configurable 
 update_app_status("Messages", status)
 update_app_status("Adium", status)
+
+
