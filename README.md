@@ -1,6 +1,6 @@
 # twims - Twitter to IM Status
 
-This a tool to update your status message in Adium.app and Messages.app to your last tweet. It includes 'new style' RTs, excludes replies, and converts t.co links to there expanded versions.
+This a tool to update your status message in Adium.app and Messages.app to your last tweet. It includes 'new style' RTs, excludes replies, and converts t.co links to their expanded versions.
 
 To install you will need to clone this repository and then run setup.py in a terminal like this:
 
