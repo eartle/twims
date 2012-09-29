@@ -2,16 +2,28 @@ import sys
 import xml.etree.ElementTree
 import urllib2
 import os
+import tempfile
+import HTMLParser
 
 def run_applescript(script):
-	cmd = "osascript -e '" + script.replace("'","'\\''") + "'"
-	return os.popen(cmd).read().strip()
+	# write the script to a temporart file (os.popen doesn't like utf-8)
+	temp = tempfile.NamedTemporaryFile(delete=False)
+	temp.write(script.encode('utf-8'))
+	temp.close()
+
+	# execute the script, delete the temp file, and return the result
+	result = os.popen('osascript ' + temp.name).read().strip()
+	os.remove(temp.name)
+	return result
 
 def is_app_running(app):
 	return run_applescript('tell application "System Events" to (name of processes) contains "' + app + '"') == "true"
 
 def update_app_status(app, status):
 	if is_app_running(app):
+		status = HTMLParser.HTMLParser().unescape(status)
+		status = status.replace('"', '\\"')
+		status = status.replace("\\", "\\\\")
 		run_applescript('tell application "' + app + '" to set status message to "' + status + '"')
 
 def add_param(url, key, value):
