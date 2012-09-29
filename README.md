@@ -16,6 +16,12 @@ If you decide you don't want your statuses updated anymore you can uninstall lik
 python setup.py rm
 ```
 
+To do a one-off status change do this:
+
+```
+python twims.py <Twitter username>
+```
+
 ## Tech notes
 
 * Uses launchd and not crontab (I'm a good boy) 
