@@ -8,9 +8,9 @@ To install you will need to clone this repository and then run setup.py in a ter
 python setup.py install <Twitter username>
 ```
 
-Your status will be updated immediately and then refreshed every 60. 
+Your status will be updated immediately and then refreshed every 60 seconds. 
 
-If you decide you don't want your statuses updated anymore you can uninstall like this:
+If you decide you don't want your IM status updated anymore you can uninstall like this:
 
 ```
 python setup.py rm
