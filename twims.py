@@ -1,20 +1,13 @@
+# -*- coding: utf-8 -*-
 import sys
 import xml.etree.ElementTree
 import urllib2
-import os
-import tempfile
 import HTMLParser
+import subprocess
 
 def run_applescript(script):
-	# write the script to a temporart file (os.popen doesn't like utf-8)
-	temp = tempfile.NamedTemporaryFile(delete=False)
-	temp.write(script.encode('utf-8'))
-	temp.close()
-
-	# execute the script, delete the temp file, and return the result
-	result = os.popen('osascript ' + temp.name).read().strip()
-	os.remove(temp.name)
-	return result
+	# execute the script
+	return subprocess.Popen(['osascript', '-e', script.encode('utf-8')], stdout=subprocess.PIPE).stdout.read().strip()
 
 def is_app_running(app):
 	return run_applescript('tell application "System Events" to (name of processes) contains "' + app + '"') == "true"
@@ -24,7 +17,7 @@ def update_app_status(app, status):
 		status = HTMLParser.HTMLParser().unescape(status)
 		status = status.replace('"', '\\"')
 		status = status.replace("\\", "\\\\")
-		run_applescript('tell application "' + app + '" to set status message to "' + status + '"')
+		run_applescript(u'tell application "' + app + u'" to set status message to "' + status + u'"')
 
 def add_param(url, key, value):
 	return url + key + "=" + value + "&"
@@ -57,8 +50,8 @@ for url in statuses[0].find("entities").find("urls"):
 
 	status = status[:start] + url.find('expanded_url').text + status[end:]
 
+print status.encode('utf-8')
+
 # Could add others here. Maybe it should be configurable 
 update_app_status("Messages", status)
 update_app_status("Adium", status)
-
-
