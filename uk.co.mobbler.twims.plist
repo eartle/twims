@@ -9,6 +9,8 @@
     	<string>%PYTHON%</string>
         <string>%SCRIPT%</string>
         <string>%USERNAME%</string>
+        <string>%ACCESS_TOKEN%</string>
+        <string>%ACCESS_TOKEN_SECRET%</string>
     </array>
     <key>StartInterval</key>
     <integer>60</integer>

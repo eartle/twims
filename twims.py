@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import sys
-import xml.etree.ElementTree
-import urllib2
-import HTMLParser
+import tweepy
 import subprocess
+import time
+import HTMLParser
+
+consumer_key = 'StnWnI5AvrMn6FQ73DoSOA'
+consumer_secret = 'lcykdASEQVM9T5s2kiJebX5zs2IbYfl9wnNx8Bw4U'
 
 def run_applescript(script):
 	# execute the script
@@ -22,33 +25,26 @@ def update_app_status(app, status):
 def add_param(url, key, value):
 	return url + key + "=" + value + "&"
 
-# fetch the latest tweet that wasn't a reply, including RTs
-url = 'http://api.twitter.com/1/statuses/user_timeline.xml?'
-url = add_param(url, 'screen_name', sys.argv[1])
-url = add_param(url, 'trim_user', '1')
-url = add_param(url, 'include_rts', '1')
-url = add_param(url, 'count', '1')
-url = add_param(url, 'exclude_replies', '1')
-url = add_param(url, 'include_entities', '1')
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(sys.argv[2], sys.argv[3])
 
-response = urllib2.urlopen(url)
-html = response.read()
+api = tweepy.API(auth)
+result = api.user_timeline(screen_name=sys.argv[1], trim_user=1, include_rts=1, count=1, exclude_replies=1)
 
 # parse the responce and get the status
-statuses = xml.etree.ElementTree.XML(html)
-status = statuses[0].find('text').text
+status = result[0].text
 
 # replace the url entities with the expanded urls
 offset = 0
 
-for url in statuses[0].find("entities").find("urls"):
-	start = int(url.attrib['start']) + offset
-	end = int(url.attrib['end']) + offset
+for url in result[0].entities['urls']:
+	start = int(url['indices'][0]) + offset
+	end = int(url['indices'][1]) + offset
 
 	# take away the length of the original string, add the length of the replacment string
-	offset = offset - (end - start) + len(url.find('expanded_url').text)
+	offset = offset - (end - start) + len(url['expanded_url'])
 
-	status = status[:start] + url.find('expanded_url').text + status[end:]
+	status = status[:start] + url['expanded_url'] + status[end:]
 
 print status.encode('utf-8')
 
