@@ -1,14 +1,16 @@
-# twims - Twitter to IM Status
+# Twims - Twitter to IM Status
 
 This a tool to update your status message in Adium.app and Messages.app to your last tweet. It includes 'new style' RTs, excludes replies, and converts t.co links to their expanded versions.
 
-To install you will need to clone this repository and then run setup.py in a terminal like this:
+To use Twims you will first need to install its dependancy <a href="https://github.com/tweepy/tweepy">Tweepy</a>.
+
+You will then need to clone this repository and then run setup.py in a terminal like this:
 
 ```
 python setup.py install
 ```
 
-You will asked to auth with Twitter and then enter the verification code.
+You will be asked to authenticate with Twitter and then enter the verification code that Twitter presents to you.
 
 Your status will be updated immediately and then refreshed every 60 seconds. 
 
